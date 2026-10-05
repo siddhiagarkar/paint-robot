@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intelligent Painter Sensors</title>
+<style>
+    /* Layout: robot stage on the left, sensor name on the right; stacks on phones */
+    :root {
+        --bg: #f0f4f8;
+        --card: #ffffff;
+        --stage: #e2e8f0;
+        --stage-border: #cbd5e1;
+        --panel: #f8fafc;
+        --panel-border: #e2e8f0;
+        --heading: #1a365d;
+        --muted: #4a5568;
+        --title: #1e3a8a;
+        --shadow: rgba(0,0,0,0.05);
+    }
+    @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+            --bg: #0f1722; --card: #17212f; --stage: #223044; --stage-border: #33445c;
+            --panel: #1c2838; --panel-border: #2c3b50; --heading: #dbe7f7; --muted: #a3b2c6;
+            --title: #93c5fd; --shadow: rgba(0,0,0,0.4); color-scheme: dark;
+        }
+    }
+    :root[data-theme="dark"] {
+        --bg: #0f1722; --card: #17212f; --stage: #223044; --stage-border: #33445c;
+        --panel: #1c2838; --panel-border: #2c3b50; --heading: #dbe7f7; --muted: #a3b2c6;
+        --title: #93c5fd; --shadow: rgba(0,0,0,0.4); color-scheme: dark;
+    }
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: var(--bg);
+        color: var(--heading);
+        margin: 0;
+        padding: 20px 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    h1 {
+        color: var(--heading);
+        margin: 0 0 5px;
+        text-align: center;
+        text-wrap: balance;
+    }
+    .subtitle {
+        color: var(--muted);
+        margin-bottom: 30px;
+        font-size: 1.1em;
+        text-align: center;
+    }
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        background: var(--card);
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px var(--shadow);
+        max-width: 1100px;
+        width: 100%;
+        box-sizing: border-box;
+        gap: 30px;
+    }
+    .stage-wrap {
+        flex: 0 1 608px;
+        min-width: 0;
+        max-width: 100%;
+        aspect-ratio: 608 / 508;
+        position: relative;
+    }
+    .robot-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 600px;
+        height: 500px;
+        transform-origin: top left;
+        background: var(--stage);
+        border-radius: 15px;
+        border: 4px dashed var(--stage-border);
+        overflow: hidden;
+    }
+    /* Cartoon Art Elements */
+    .cartoon-element {
+        position: absolute;
+        background: #475569;
+        border: 4px solid #0f172a;
+        border-radius: 8px;
+    }
+    .lidar-crown {
+        width: 60px; height: 40px; top: 60px; left: 270px;
+        background: #334155;
+        border-radius: 50% 50% 0 0;
+        animation: spin 3s infinite linear;
+    }
+    .neck { width: 20px; height: 40px; top: 100px; left: 290px; background: #64748b; }
+    .arm-joint-1 {
+        width: 30px; height: 120px; top: 130px; left: 310px;
+        background: #f59e0b;
+        transform: rotate(-30deg);
+        transform-origin: top left;
+    }
+    .arm-joint-2 {
+        width: 25px; height: 100px; top: 210px; left: 380px;
+        background: #d97706;
+        transform: rotate(45deg);
+        transform-origin: top left;
+    }
+    .nozzle-head {
+        width: 40px; height: 30px; top: 260px; left: 460px;
+        background: #ef4444;
+        border-radius: 0 8px 8px 0;
+    }
+    .chassis { width: 220px; height: 140px; top: 240px; left: 190px; background: #1e293b; border-radius: 20px; }
+    .camera-eye { width: 50px; height: 25px; top: 215px; left: 205px; background: #0f172a; border-radius: 6px; }
+    .wheel {
+        width: 70px; height: 70px;
+        background: #0f172a;
+        border: 5px solid #334155;
+        border-radius: 50%;
+        position: absolute;
+    }
+    .w1 { top: 350px; left: 160px; }
+    .w2 { top: 350px; left: 370px; }
+
+    /* Interactive Hotspots */
+    .hotspot {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        background: #3b82f6;
+        border: 3px solid white;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba(59,130,246,0.8);
+        animation: pulse 2s infinite;
+        z-index: 10;
+        transition: scale 0.15s;
+    }
+    .hotspot:hover, .hotspot:focus-visible { background: #10b981; scale: 1.2; }
+    .hotspot:focus-visible { outline: 3px solid #10b981; outline-offset: 2px; }
+    .hotspot.active { background: #10b981; }
+
+    /* Name Panel */
+    .info-panel {
+        flex: 1 1 260px;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 20px;
+        background: var(--panel);
+        border-radius: 15px;
+        border: 2px solid var(--panel-border);
+    }
+    .info-title {
+        font-size: 1.6em;
+        color: var(--title);
+        margin: 0;
+        text-wrap: balance;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59,130,246,0.7); }
+        70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(59,130,246,0); }
+        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59,130,246,0); }
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .hotspot, .lidar-crown { animation: none; }
+    }
+</style>
+</head>
+<body>
+
+<h1>Meet the Intelligent Painter! 🤖🎨</h1>
+<div class="subtitle">Click the flashing blue sensor nodes to explore how the robot tracks its environment.</div>
+
+<div class="container">
+    <div class="stage-wrap" id="stage-wrap">
+        <div class="robot-canvas" id="stage">
+            <div class="cartoon-element lidar-crown"></div>
+            <div class="cartoon-element neck"></div>
+            <div class="cartoon-element chassis"></div>
+            <div class="cartoon-element camera-eye"></div>
+            <div class="cartoon-element arm-joint-1"></div>
+            <div class="cartoon-element arm-joint-2"></div>
+            <div class="cartoon-element nozzle-head"></div>
+            <div class="wheel w1"></div>
+            <div class="wheel w2"></div>
+
+            <button class="hotspot" style="top: 47px; left: 285px;" data-key="lidar" aria-label="LiDAR Navigation Sensors"></button>
+            <button class="hotspot" style="top: 202px; left: 215px;" data-key="spatial" aria-label="Spatial AI Cameras and CPU"></button>
+            <button class="hotspot" style="top: 232px; left: 467px;" data-key="laser" aria-label="Laser Distance Gauge Edge Sensors"></button>
+            <button class="hotspot" style="top: 282px; left: 437px;" data-key="flow" aria-label="Flow / Pressure Sensor"></button>
+            <button class="hotspot" style="top: 377px; left: 237px;" data-key="sonar" aria-label="Ultrasonic Sonar Sensors"></button>
+            <button class="hotspot" style="top: 372px; left: 387px;" data-key="encoders" aria-label="Wheel Encoders"></button>
+        </div>
+    </div>
+
+    <div class="info-panel" aria-live="polite">
+        <h2 class="info-title" id="info-title">Tap a sensor node...</h2>
+    </div>
+</div>
+
+<script>
+    const sensorTitles = {
+        lidar: "🔄 LiDAR Navigation Sensors",
+        spatial: "🧠 Spatial AI Cameras & CPU",
+        laser: "📏 Laser Distance Gauge Edge Sensors",
+        flow: "🩸 Flow / Pressure Sensor",
+        sonar: "🦇 Ultrasonic Sonar Sensors",
+        encoders: "⚙️ Wheel Encoders"
+    };
+
+    const title = document.getElementById('info-title');
+    document.querySelectorAll('.hotspot').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.hotspot.active').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            title.textContent = sensorTitles[btn.dataset.key];
+        });
+    });
+
+    // Scale the fixed-size 608x508 drawing to fit its column
+    const wrap = document.getElementById('stage-wrap');
+    const stage = document.getElementById('stage');
+    const fit = () => { stage.style.transform = `scale(${wrap.clientWidth / 608})`; };
+    new ResizeObserver(fit).observe(wrap);
+    fit();
+</script>
+</body>
+</html>
