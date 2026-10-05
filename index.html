@@ -17,18 +17,19 @@
         --muted: #4a5568;
         --title: #1e3a8a;
         --shadow: rgba(0,0,0,0.05);
+        --wall: #d3dbe5;
     }
     @media (prefers-color-scheme: dark) {
         :root:not([data-theme="light"]) {
             --bg: #0f1722; --card: #17212f; --stage: #223044; --stage-border: #33445c;
             --panel: #1c2838; --panel-border: #2c3b50; --heading: #dbe7f7; --muted: #a3b2c6;
-            --title: #93c5fd; --shadow: rgba(0,0,0,0.4); color-scheme: dark;
+            --title: #93c5fd; --shadow: rgba(0,0,0,0.4); --wall: #3a4b62; color-scheme: dark;
         }
     }
     :root[data-theme="dark"] {
         --bg: #0f1722; --card: #17212f; --stage: #223044; --stage-border: #33445c;
         --panel: #1c2838; --panel-border: #2c3b50; --heading: #dbe7f7; --muted: #a3b2c6;
-        --title: #93c5fd; --shadow: rgba(0,0,0,0.4); color-scheme: dark;
+        --title: #93c5fd; --shadow: rgba(0,0,0,0.4); --wall: #3a4b62; color-scheme: dark;
     }
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -111,11 +112,8 @@
         transform-origin: top left;
     }
     .art { position: absolute; inset: 0; width: 600px; height: 500px; pointer-events: none; }
-    .nozzle-head {
-        width: 40px; height: 30px; top: 260px; left: 460px;
-        background: #ef4444;
-        border-radius: 0 8px 8px 0;
-    }
+    .wall { fill: var(--wall); }
+    .floor { stroke: var(--stage-border); }
     .chassis { width: 220px; height: 140px; top: 240px; left: 190px; background: #1e293b; border-radius: 20px; }
     .camera-eye { width: 50px; height: 25px; top: 215px; left: 205px; background: #0f172a; border-radius: 6px; }
     .wheel {
@@ -194,6 +192,10 @@
             <div class="cartoon-element chassis"></div>
             <div class="cartoon-element camera-eye"></div>
             <svg class="art" viewBox="0 0 600 500" aria-hidden="true">
+                <!-- Room: floor, ceiling and the wall being painted -->
+                <line class="floor" x1="0" y1="432" x2="600" y2="432" stroke-width="4"/>
+                <rect class="wall" x="400" y="0" width="200" height="12"/>
+                <rect class="wall" x="575" y="0" width="40" height="432"/>
                 <!-- Control tablet with wireless link -->
                 <rect x="48" y="150" width="104" height="72" rx="10" fill="#1e293b" stroke="#0f172a" stroke-width="4"/>
                 <rect x="58" y="159" width="84" height="54" rx="4" fill="#bfdbfe"/>
@@ -229,20 +231,48 @@
 
                 <!-- Paint hose: tank to pump, pump up along the arm to the nozzle -->
                 <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M238 258 C238 232 300 240 318 300 M360 290 C360 262 362 242 367 231 L427 141 Q440 122 453 146 L487 260" stroke="#0f172a" stroke-width="9"/>
-                    <path d="M238 258 C238 232 300 240 318 300 M360 290 C360 262 362 242 367 231 L427 141 Q440 122 453 146 L487 260" stroke="#38bdf8" stroke-width="4"/>
+                    <path d="M238 258 C238 232 300 240 318 300 M360 290 C360 262 362 242 367 231 L427 141 Q440 122 453 146 L486 236" stroke="#0f172a" stroke-width="9"/>
+                    <path d="M238 258 C238 232 300 240 318 300 M360 290 C360 262 362 242 367 231 L427 141 Q440 122 453 146 L486 236" stroke="#38bdf8" stroke-width="4"/>
                 </g>
                 <circle cx="397" cy="186" r="5" fill="#94a3b8" stroke="#0f172a" stroke-width="2"/>
                 <circle cx="470" cy="203" r="5" fill="#94a3b8" stroke="#0f172a" stroke-width="2"/>
+
+                <!-- Paint on the wall: hand cut-in band at the ceiling, wet spray ahead, smooth rolled coat behind -->
+                <rect x="569" y="12" width="6" height="26" fill="#38bdf8"/>
+                <rect x="569" y="301" width="6" height="131" fill="#38bdf8"/>
+                <g transform="translate(476 262) scale(1.5) translate(-476 -262)">
+                <g fill="#38bdf8">
+                    <rect x="543" y="214" width="5" height="6"/><rect x="545" y="224" width="3" height="5"/>
+                    <rect x="542" y="232" width="6" height="8"/><rect x="544" y="244" width="4" height="4"/>
+                    <rect x="542" y="252" width="6" height="10"/><rect x="545" y="266" width="3" height="5"/>
+                    <rect x="542" y="274" width="6" height="14"/>
+                </g>
+
+                <!-- Hybrid head: tool plate with laser gauge, spray nozzle on top, sprung roller below -->
+                <circle cx="476" cy="262" r="10" fill="#475569" stroke="#0f172a" stroke-width="4"/>
+                <rect x="482" y="220" width="16" height="100" rx="4" fill="#475569" stroke="#0f172a" stroke-width="4"/>
+                <rect x="482" y="204" width="16" height="14" rx="3" fill="#334155" stroke="#0f172a" stroke-width="3"/>
+                <line x1="498" y1="211" x2="542" y2="211" stroke="#ef4444" stroke-width="2" stroke-dasharray="4 3"/>
+                <path d="M526 234 L542 212 L542 256 Z" fill="#38bdf8" opacity="0.35"/>
+                <g fill="#38bdf8">
+                    <circle cx="531" cy="229" r="1.8"/><circle cx="535" cy="240" r="1.8"/>
+                    <circle cx="538" cy="223" r="1.5"/><circle cx="533" cy="236" r="1.4"/>
+                </g>
+                <rect x="496" y="224" width="26" height="20" rx="4" fill="#ef4444" stroke="#0f172a" stroke-width="4"/>
+                <rect x="521" y="229" width="6" height="10" fill="#0f172a"/>
+                <polyline points="498,300 501,293 504,307 507,293 510,307 513,300" fill="none" stroke="#94a3b8" stroke-width="3" stroke-linejoin="round"/>
+                <line x1="513" y1="300" x2="528" y2="300" stroke="#0f172a" stroke-width="4"/>
+                <circle cx="528" cy="300" r="14" fill="#38bdf8" stroke="#0f172a" stroke-width="4"/>
+                <circle cx="528" cy="300" r="4" fill="#0f172a"/>
+                </g>
             </svg>
-            <div class="cartoon-element nozzle-head"></div>
             <div class="wheel w1"></div>
             <div class="wheel w2"></div>
 
             <button class="hotspot" style="top: 47px; left: 285px;" data-key="lidar" aria-label="LiDAR Navigation Sensors"></button>
             <button class="hotspot" style="top: 202px; left: 215px;" data-key="spatial" aria-label="Spatial AI Cameras and CPU"></button>
-            <button class="hotspot" style="top: 232px; left: 467px;" data-key="laser" aria-label="Laser Distance Gauge Edge Sensors"></button>
-            <button class="hotspot" style="top: 282px; left: 437px;" data-key="flow" aria-label="Flow / Pressure Sensor"></button>
+            <button class="hotspot" style="top: 163px; left: 484px;" data-key="laser" aria-label="Laser Distance Gauge Edge Sensors"></button>
+            <button class="hotspot" style="top: 205px; left: 510px;" data-key="flow" aria-label="Flow / Pressure Sensor"></button>
             <button class="hotspot" style="top: 377px; left: 237px;" data-key="sonar" aria-label="Ultrasonic Sonar Sensors"></button>
             <button class="hotspot" style="top: 372px; left: 387px;" data-key="encoders" aria-label="Wheel Encoders"></button>
             <button class="hotspot" style="top: 171px; left: 85px;" data-key="tablet" aria-label="Control Tablet and App"></button>
@@ -250,11 +280,15 @@
             <button class="hotspot" style="top: 299px; left: 333px;" data-key="pump" aria-label="Paint Pump and Spray System"></button>
             <button class="hotspot" style="top: 196px; left: 324px;" data-key="estop" aria-label="Emergency Stop"></button>
             <button class="hotspot" style="top: 171px; left: 382px;" data-key="hose" aria-label="Cable and Hose Management"></button>
+            <button class="hotspot" style="top: 254px; left: 482px;" data-key="head" aria-label="Hybrid Spray and Roller Head"></button>
+            <button class="hotspot" style="top: 304px; left: 539px;" data-key="roller" aria-label="Back-Roller"></button>
+            <button class="hotspot" style="top: 328px; left: 504px;" data-key="force" aria-label="Force and Contact Sensor"></button>
+            <button class="hotspot" style="top: 15px; left: 557px;" data-key="edges" aria-label="Edges: Cut In by Hand"></button>
         </div>
     </div>
 
     <div class="info-panel" aria-live="polite">
-        <h2 class="info-title" id="info-title">Tap a sensor node...</h2>
+        <h2 class="info-title" id="info-title">Tap a node...</h2>
     </div>
 </div>
 
@@ -265,6 +299,10 @@
         pump: "💦 Paint Pump / Spray System",
         estop: "🛑 Emergency Stop",
         hose: "🔌 Cable & Hose Management",
+        head: "🔀 Hybrid Spray + Roller Head",
+        roller: "🧽 Back-Roller",
+        force: "🗜️ Force / Contact Sensor",
+        edges: "✋ Edges: Cut In by Hand",
         lidar: "🔄 LiDAR Navigation Sensors",
         spatial: "🧠 Spatial AI Cameras & CPU",
         laser: "📏 Laser Distance Gauge Edge Sensors",
