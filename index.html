@@ -96,6 +96,18 @@
         width: 60px; height: 40px; top: 60px; left: 270px;
         background: #334155;
         border-radius: 50% 50% 0 0;
+        /* spins around the mast like a real LiDAR head, staying upright */
+        animation: lidar-spin 2s infinite linear;
+    }
+    .lidar-crown::after {
+        content: '';
+        position: absolute;
+        left: 8px;
+        top: 14px;
+        width: 16px;
+        height: 8px;
+        background: #38bdf8;
+        border-radius: 2px;
     }
     .neck { width: 20px; height: 132px; top: 100px; left: 290px; background: #64748b; }
     .arm-joint-1 {
@@ -168,6 +180,10 @@
         0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59,130,246,0.7); }
         70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(59,130,246,0); }
         100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59,130,246,0); }
+    }
+    @keyframes lidar-spin {
+        0% { transform: perspective(300px) rotateY(0deg); }
+        100% { transform: perspective(300px) rotateY(360deg); }
     }
     @keyframes spin {
         0% { transform: rotate(0deg); }
