@@ -190,6 +190,8 @@
         70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(59,130,246,0); }
         100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59,130,246,0); }
     }
+    .hose-flow { animation: hose-flow 0.8s infinite linear; }
+    @keyframes hose-flow { to { stroke-dashoffset: -32; } }
     @keyframes lidar-sweep {
         0%   { transform: translateX(-18px) scaleX(0.2); opacity: 0.4; }
         25%  { transform: translateX(8px) scaleX(0.75); opacity: 1; }
@@ -202,7 +204,7 @@
         100% { transform: rotate(360deg); }
     }
     @media (prefers-reduced-motion: reduce) {
-        .hotspot, .lidar-window { animation: none; }
+        .hotspot, .lidar-window, .hose-flow { animation: none; }
     }
 </style>
 </head>
@@ -241,7 +243,10 @@
                 <!-- Paint storage tank on the body -->
                 <rect x="228" y="258" width="20" height="12" rx="2" fill="#64748b" stroke="#0f172a" stroke-width="3"/>
                 <rect x="212" y="268" width="52" height="86" rx="10" fill="#e2e8f0" stroke="#0f172a" stroke-width="4"/>
-                <rect x="216" y="300" width="44" height="50" rx="6" fill="#38bdf8"/>
+                <rect x="216" y="300" width="44" height="50" rx="6" fill="#a855f7">
+                    <animate attributeName="y" values="296;326;296" keyTimes="0;0.9;1" dur="8s" repeatCount="indefinite"/>
+                    <animate attributeName="height" values="54;24;54" keyTimes="0;0.9;1" dur="8s" repeatCount="indefinite"/>
+                </rect>
 
                 <!-- Paint pump with pressure gauge -->
                 <rect x="318" y="290" width="60" height="48" rx="6" fill="#64748b" stroke="#0f172a" stroke-width="4"/>
@@ -262,16 +267,17 @@
                 <!-- Paint hose: tank to pump, pump up along the arm to the nozzle -->
                 <g fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M238 258 C238 232 300 240 318 300 M360 290 C360 262 362 242 367 231 L427 141 Q440 122 453 146 L486 236" stroke="#0f172a" stroke-width="9"/>
-                    <path d="M238 258 C238 232 300 240 318 300 M360 290 C360 262 362 242 367 231 L427 141 Q440 122 453 146 L486 236" stroke="#38bdf8" stroke-width="4"/>
+                    <path d="M238 258 C238 232 300 240 318 300 M360 290 C360 262 362 242 367 231 L427 141 Q440 122 453 146 L486 236" stroke="#a855f7" stroke-width="4"/>
+                    <path class="hose-flow" d="M238 258 C238 232 300 240 318 300 M360 290 C360 262 362 242 367 231 L427 141 Q440 122 453 146 L486 236" stroke="#e9d5ff" stroke-width="2.5" stroke-dasharray="5 11"/>
                 </g>
                 <circle cx="397" cy="186" r="5" fill="#94a3b8" stroke="#0f172a" stroke-width="2"/>
                 <circle cx="470" cy="203" r="5" fill="#94a3b8" stroke="#0f172a" stroke-width="2"/>
 
                 <!-- Paint on the wall: edge-pad band at the ceiling, wet spray ahead, smooth rolled coat behind -->
-                <rect x="569" y="12" width="6" height="26" fill="#38bdf8"/>
-                <rect x="569" y="301" width="6" height="131" fill="#38bdf8"/>
+                <rect x="569" y="12" width="6" height="26" fill="#a855f7"/>
+                <rect x="569" y="301" width="6" height="131" fill="#a855f7"/>
                 <g transform="translate(476 262) scale(1.5) translate(-476 -262)">
-                <g fill="#38bdf8">
+                <g fill="#a855f7">
                     <rect x="543" y="214" width="5" height="6"/><rect x="545" y="224" width="3" height="5"/>
                     <rect x="542" y="232" width="6" height="8"/><rect x="544" y="244" width="4" height="4"/>
                     <rect x="542" y="252" width="6" height="10"/><rect x="545" y="266" width="3" height="5"/>
@@ -283,16 +289,18 @@
                 <rect x="482" y="220" width="16" height="100" rx="4" fill="#475569" stroke="#0f172a" stroke-width="4"/>
                 <rect x="482" y="204" width="16" height="14" rx="3" fill="#334155" stroke="#0f172a" stroke-width="3"/>
                 <line x1="498" y1="211" x2="542" y2="211" stroke="#ef4444" stroke-width="2" stroke-dasharray="4 3"/>
-                <path d="M526 234 L542 212 L542 256 Z" fill="#38bdf8" opacity="0.35"/>
-                <g fill="#38bdf8">
-                    <circle cx="531" cy="229" r="1.8"/><circle cx="535" cy="240" r="1.8"/>
-                    <circle cx="538" cy="223" r="1.5"/><circle cx="533" cy="236" r="1.4"/>
+                <path d="M526 234 L542 212 L542 256 Z" fill="#a855f7" opacity="0.35"/>
+                <g fill="#a855f7">
+                    <circle r="1.8"><animate attributeName="cx" values="527;542" dur="0.6s" repeatCount="indefinite"/><animate attributeName="cy" values="234;218" dur="0.6s" repeatCount="indefinite"/></circle>
+                    <circle r="1.8"><animate attributeName="cx" values="527;542" dur="0.6s" begin="-0.15s" repeatCount="indefinite"/><animate attributeName="cy" values="234;240" dur="0.6s" begin="-0.15s" repeatCount="indefinite"/></circle>
+                    <circle r="1.5"><animate attributeName="cx" values="527;542" dur="0.6s" begin="-0.3s" repeatCount="indefinite"/><animate attributeName="cy" values="234;226" dur="0.6s" begin="-0.3s" repeatCount="indefinite"/></circle>
+                    <circle r="1.5"><animate attributeName="cx" values="527;542" dur="0.6s" begin="-0.45s" repeatCount="indefinite"/><animate attributeName="cy" values="234;250" dur="0.6s" begin="-0.45s" repeatCount="indefinite"/></circle>
                 </g>
                 <rect x="496" y="224" width="26" height="20" rx="4" fill="#ef4444" stroke="#0f172a" stroke-width="4"/>
                 <rect x="521" y="229" width="6" height="10" fill="#0f172a"/>
                 <polyline points="498,300 501,293 504,307 507,293 510,307 513,300" fill="none" stroke="#94a3b8" stroke-width="3" stroke-linejoin="round"/>
                 <line x1="513" y1="300" x2="528" y2="300" stroke="#0f172a" stroke-width="4"/>
-                <circle cx="528" cy="300" r="14" fill="#38bdf8" stroke="#0f172a" stroke-width="4"/>
+                <circle cx="528" cy="300" r="14" fill="#a855f7" stroke="#0f172a" stroke-width="4"/>
                 <circle cx="528" cy="300" r="4" fill="#0f172a"/>
                 </g>
             </svg>
@@ -349,6 +357,10 @@
             title.textContent = sensorTitles[btn.dataset.key];
         });
     });
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.querySelector('.art').pauseAnimations();
+    }
 
     // Scale the fixed-size 608x508 drawing to fit its column
     const wrap = document.getElementById('stage-wrap');
