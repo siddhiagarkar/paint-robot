@@ -48,7 +48,7 @@
     }
     .subtitle {
         color: var(--muted);
-        margin-bottom: 30px;
+        margin-bottom: 20px;
         font-size: 1.1em;
         text-align: center;
     }
@@ -59,15 +59,16 @@
         padding: 20px;
         border-radius: 20px;
         box-shadow: 0 10px 25px var(--shadow);
-        max-width: 1100px;
+        max-width: 1400px;
         width: 100%;
         box-sizing: border-box;
         gap: 30px;
     }
     .stage-wrap {
-        flex: 0 1 608px;
+        flex: 3 1 608px;
         min-width: 0;
-        max-width: 100%;
+        /* as large as possible while the whole robot stays on screen */
+        max-width: min(100%, calc((100vh - 190px) * 608 / 508));
         aspect-ratio: 608 / 508;
         position: relative;
     }
@@ -130,11 +131,12 @@
     /* Interactive Hotspots */
     .hotspot {
         position: absolute;
-        width: 30px;
-        height: 30px;
+        width: 20px;
+        height: 20px;
+        margin: 5px;
         padding: 0;
         background: #3b82f6;
-        border: 3px solid white;
+        border: 2px solid white;
         border-radius: 50%;
         cursor: pointer;
         box-shadow: 0 0 10px rgba(59,130,246,0.8);
@@ -148,7 +150,7 @@
 
     /* Name Panel */
     .info-panel {
-        flex: 1 1 260px;
+        flex: 1 1 220px;
         min-width: 0;
         display: flex;
         flex-direction: column;
