@@ -109,6 +109,7 @@
         transform: rotate(45deg);
         transform-origin: top left;
     }
+    .art { position: absolute; inset: 0; width: 600px; height: 500px; pointer-events: none; }
     .nozzle-head {
         width: 40px; height: 30px; top: 260px; left: 460px;
         background: #ef4444;
@@ -190,8 +191,48 @@
             <div class="cartoon-element neck"></div>
             <div class="cartoon-element chassis"></div>
             <div class="cartoon-element camera-eye"></div>
-            <div class="cartoon-element arm-joint-1"></div>
-            <div class="cartoon-element arm-joint-2"></div>
+            <svg class="art" viewBox="0 0 600 500" aria-hidden="true">
+                <!-- Control tablet with wireless link -->
+                <rect x="48" y="150" width="104" height="72" rx="10" fill="#1e293b" stroke="#0f172a" stroke-width="4"/>
+                <rect x="58" y="159" width="84" height="54" rx="4" fill="#bfdbfe"/>
+                <rect x="64" y="166" width="72" height="18" rx="2" fill="#93c5fd"/>
+                <rect x="64" y="196" width="72" height="8" rx="4" fill="#e2e8f0"/>
+                <rect x="64" y="196" width="44" height="8" rx="4" fill="#10b981"/>
+                <g fill="none" stroke="#3b82f6" stroke-width="3" stroke-linecap="round">
+                    <path d="M162 174 Q170 186 162 198"/>
+                    <path d="M172 166 Q184 186 172 206"/>
+                    <path d="M182 158 Q198 186 182 214"/>
+                </g>
+
+                <!-- Paint storage tank on the body -->
+                <rect x="228" y="258" width="20" height="12" rx="2" fill="#64748b" stroke="#0f172a" stroke-width="3"/>
+                <rect x="212" y="268" width="52" height="86" rx="10" fill="#e2e8f0" stroke="#0f172a" stroke-width="4"/>
+                <rect x="216" y="300" width="44" height="50" rx="6" fill="#38bdf8"/>
+
+                <!-- Paint pump with pressure gauge -->
+                <rect x="318" y="290" width="60" height="48" rx="6" fill="#64748b" stroke="#0f172a" stroke-width="4"/>
+                <circle cx="348" cy="314" r="12" fill="#f8fafc" stroke="#0f172a" stroke-width="3"/>
+                <line x1="348" y1="314" x2="355" y2="306" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+
+                <!-- Emergency stop button -->
+                <rect x="324" y="228" width="30" height="14" rx="3" fill="#facc15" stroke="#0f172a" stroke-width="3"/>
+                <circle cx="339" cy="224" r="10" fill="#ef4444" stroke="#0f172a" stroke-width="3"/>
+
+                <!-- Robotic arm: shoulder on the body, elbow, wrist at the nozzle -->
+                <path d="M380 240 L440 150 L474 262" fill="none" stroke="#0f172a" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+                <line x1="380" y1="240" x2="440" y2="150" stroke="#f59e0b" stroke-width="26" stroke-linecap="round"/>
+                <line x1="440" y1="150" x2="474" y2="262" stroke="#d97706" stroke-width="22" stroke-linecap="round"/>
+                <circle cx="380" cy="240" r="17" fill="#475569" stroke="#0f172a" stroke-width="4"/>
+                <circle cx="440" cy="150" r="15" fill="#475569" stroke="#0f172a" stroke-width="4"/>
+
+                <!-- Paint hose: tank to pump, pump up along the arm to the nozzle -->
+                <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M238 258 C238 232 300 240 318 300 M360 290 C360 262 362 242 367 231 L427 141 Q440 122 453 146 L487 260" stroke="#0f172a" stroke-width="9"/>
+                    <path d="M238 258 C238 232 300 240 318 300 M360 290 C360 262 362 242 367 231 L427 141 Q440 122 453 146 L487 260" stroke="#38bdf8" stroke-width="4"/>
+                </g>
+                <circle cx="397" cy="186" r="5" fill="#94a3b8" stroke="#0f172a" stroke-width="2"/>
+                <circle cx="470" cy="203" r="5" fill="#94a3b8" stroke="#0f172a" stroke-width="2"/>
+            </svg>
             <div class="cartoon-element nozzle-head"></div>
             <div class="wheel w1"></div>
             <div class="wheel w2"></div>
@@ -202,6 +243,11 @@
             <button class="hotspot" style="top: 282px; left: 437px;" data-key="flow" aria-label="Flow / Pressure Sensor"></button>
             <button class="hotspot" style="top: 377px; left: 237px;" data-key="sonar" aria-label="Ultrasonic Sonar Sensors"></button>
             <button class="hotspot" style="top: 372px; left: 387px;" data-key="encoders" aria-label="Wheel Encoders"></button>
+            <button class="hotspot" style="top: 171px; left: 85px;" data-key="tablet" aria-label="Control Tablet and App"></button>
+            <button class="hotspot" style="top: 285px; left: 223px;" data-key="tank" aria-label="Paint Storage Tank"></button>
+            <button class="hotspot" style="top: 299px; left: 333px;" data-key="pump" aria-label="Paint Pump and Spray System"></button>
+            <button class="hotspot" style="top: 196px; left: 324px;" data-key="estop" aria-label="Emergency Stop"></button>
+            <button class="hotspot" style="top: 171px; left: 382px;" data-key="hose" aria-label="Cable and Hose Management"></button>
         </div>
     </div>
 
@@ -212,6 +258,11 @@
 
 <script>
     const sensorTitles = {
+        tablet: "📱 Control Tablet / App",
+        tank: "🪣 Paint Storage Tank",
+        pump: "💦 Paint Pump / Spray System",
+        estop: "🛑 Emergency Stop",
+        hose: "🔌 Cable & Hose Management",
         lidar: "🔄 LiDAR Navigation Sensors",
         spatial: "🧠 Spatial AI Cameras & CPU",
         laser: "📏 Laser Distance Gauge Edge Sensors",
